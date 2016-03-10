@@ -151,6 +151,21 @@ class Project(object):
     def get_dict():
         return dict(Project._dict)
 
+
+class Project_cogl(Tarball, Project):
+    def __init__(self):
+        Project.__init__(self,
+            'cogl',
+            archive_url = 'http://ftp.acc.umu.se/pub/GNOME/sources/cogl/1.22/cogl-1.22.0.tar.xz',
+			dependencies = ['glib','cairo','pango','gdk-pixbuf'],
+            )
+
+    def build(self):
+        self.exec_msbuild(r'build\win32\vs%(vs_ver)s\cogl.sln')
+
+Project.add(Project_cogl())
+
+
 class Project_jsonglib(Tarball, Project):
     def __init__(self):
         Project.__init__(self,
