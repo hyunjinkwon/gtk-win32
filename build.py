@@ -1105,7 +1105,7 @@ def get_options(args):
     if not opts.patches_root_dir:
         opts.patches_root_dir = os.path.join(args.build_dir, 'github', 'gtk-win32')
     if not opts.vs_install_path:
-        opts.vs_install_path = r'C:\Program Files (x86)\Microsoft Visual Studio %s.0' % (opts.vs_ver,)
+        opts.vs_install_path = r'C:\Program Files\Microsoft Visual Studio %s.0' % (opts.vs_ver,)
 
     opts.projects = args.project
 
@@ -1194,7 +1194,7 @@ Examples:
     #                     help='Configuration to build, release or debug. Default is release.')
     p_build.add_argument('--build-dir', default=r'C:\gtk-build',
                          help='The directory where the sources will be downloaded and built.')
-    p_build.add_argument('--msys-dir', default=r'C:\Msys64',
+    p_build.add_argument('--msys-dir', default=r'C:\Msys32',
                          help='The directory where you installed msys2.')
     p_build.add_argument('--archives-download-dir',
                          help="The directory to download the source archives to. It will be created. " +
@@ -1205,8 +1205,8 @@ Examples:
     p_build.add_argument('--vs-ver', default='12',
                          help="Visual Studio version 10,12, etc. Default is 12.")
     p_build.add_argument('--vs-install-path',
-                         help=r"The directory where you installed Visual Studio. Default is 'C:\Program Files (x86)\Microsoft Visual Studio $(build-ver).0'")
-    p_build.add_argument('--cmake-path', default=r'C:\Program Files (x86)\CMake\bin',
+                         help=r"The directory where you installed Visual Studio. Default is 'C:\Program Files\Microsoft Visual Studio $(build-ver).0'")
+    p_build.add_argument('--cmake-path', default=r'C:\CMake\bin',
                          help="The directory where you installed cmake.")
     p_build.add_argument('--perl-dir', default=r'C:\Perl',
                          help="The directory where you installed perl.")
