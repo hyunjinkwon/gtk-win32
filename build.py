@@ -151,6 +151,18 @@ class Project(object):
     def get_dict():
         return dict(Project._dict)
 
+class Project_jsonglib(Tarball, Project):
+    def __init__(self):
+        Project.__init__(self,
+            'json-glib',
+            archive_url = 'http://ftp.acc.umu.se/pub/GNOME/sources/json-glib/1.1/json-glib-1.1.2.tar.xz',
+            )
+
+    def build(self):
+        self.exec_msbuild(r'build\win32\vs%(vs_ver)s\json-glib.sln')
+
+Project.add(Project_jsonglib())
+
 class Project_atk(Tarball, Project):
     def __init__(self):
         Project.__init__(self,
