@@ -53,3 +53,11 @@ HexChat developers decided that their script should focus on their specific need
     ```
 
 1. When the script is done, your GTK+ stack will be found under _C:\gtk-build\gtk_. Enjoy!
+
+## Add Module
+
+1.Json-Glib
+
+2.Cogl
+
+3.Clutter
