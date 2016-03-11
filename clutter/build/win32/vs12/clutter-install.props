@@ -14,6 +14,7 @@ mkdir $(CopyDir)\share\clutter-$(ApiVersion)\data
 
 copy $(BinDir)\$(ClutterDllPrefix)clutter$(ClutterDllSuffix).dll $(CopyDir)\bin
 copy $(BinDir)\$(ClutterDllPrefix)clutter$(ClutterDllSuffix).pdb $(CopyDir)\bin
+copy $(BinDir)\*.exe $(CopyDir)\bin
 
 copy ..\..\..\tests\interactive\*.png $(CopyDir)\share\clutter-$(ApiVersion)\data
 copy ..\..\..\tests\clutter-1.0.suppressions $(CopyDir)\share\clutter-$(ApiVersion)\data
