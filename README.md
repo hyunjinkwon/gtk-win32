@@ -61,11 +61,13 @@ HexChat developers decided that their script should focus on their specific need
     cd C:\gtk-build\github\gtk-win32
     python .\build.py build json-glib
     ```
+
 2.Cogl
     ```
     cd C:\gtk-build\github\gtk-win32
     python .\build.py build cogl
     ```
+
 3.Clutter
     ```
     cd C:\gtk-build\github\gtk-win32
