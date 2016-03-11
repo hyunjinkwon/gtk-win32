@@ -151,6 +151,20 @@ class Project(object):
     def get_dict():
         return dict(Project._dict)
 
+class Project_clutter(Tarball, Project):
+    def __init__(self):
+        Project.__init__(self,
+            'clutter',
+			archive_url = 'http://ftp.acc.umu.se/pub/GNOME/sources/clutter/1.24/clutter-1.24.2.tar.xz',
+            #archive_url = 'http://ftp.acc.umu.se/pub/GNOME/sources/clutter/1.25/clutter-1.25.6.tar.xz',
+			#dependencies = ['atk','cogl','json-glib'],
+			dependencies = ['atk','cogl','json-glib'],
+            )
+
+    def build(self):
+        self.exec_msbuild(r'build\win32\vs%(vs_ver)s\clutter.sln')
+
+Project.add(Project_clutter())
 
 class Project_cogl(Tarball, Project):
     def __init__(self):
@@ -171,6 +185,7 @@ class Project_jsonglib(Tarball, Project):
         Project.__init__(self,
             'json-glib',
             archive_url = 'http://ftp.acc.umu.se/pub/GNOME/sources/json-glib/1.1/json-glib-1.1.2.tar.xz',
+			dependencies = ['glib'],
             )
 
     def build(self):
