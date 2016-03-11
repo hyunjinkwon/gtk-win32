@@ -5,9 +5,16 @@
 	* `<CopyDir>$(GLibEtcInstallRoot)</CopyDir>` with
 `<CopyDir>..\..\..\..\atk-rel</CopyDir>`
 	* `<AtkSeparateVSDllSuffix>-1-vs$(VSVer)</AtkSeparateVSDllSuffix>` with
-`<AtkSeparateVSDllSuffix>-1.0</AtkSeparateVSDllSuffix>`
+`<AtkSeparateVSDllSuffix>--$(ApiVersion)</AtkSeparateVSDllSuffix>`
+
+* replace <ApiVersion>1.2</ApiVersion> to <ApiVersion>1.0</ApiVersion>
+
  * In `build\win32\vs12\atk.vcxproj`:
 	*  add `<Import Project="..\..\..\..\stack.props" />`
+
 	* Remove all `<Optimization>` lines
  * In `build\win32\vs12\install.vcxproj`:
 	* replace `AtkEtcInstallRoot` with `GlibEtcInstallRoot`
+
+ * In `build/win32/vs12/json-glib-install.props`:
+	* insert command for "json-utils.h copy"
