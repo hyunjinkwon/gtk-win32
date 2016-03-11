@@ -57,19 +57,25 @@ HexChat developers decided that their script should focus on their specific need
 ## Add Module
 
 1.Json-Glib
-	    ```
-    cd C:\gtk-build\github\gtk-win32
-    python .\build.py build json-glib
-    ```
+
+	```
+	cd C:\gtk-build\github\gtk-win32
+	python .\build.py build json-glib
+	```
 
 2.Cogl
-    ```
-    cd C:\gtk-build\github\gtk-win32
-    python .\build.py build cogl
-    ```
+
+	```
+	cd C:\gtk-build\github\gtk-win32
+	python .\build.py build cogl
+	```
 
 3.Clutter
-    ```
-    cd C:\gtk-build\github\gtk-win32
-    python .\build.py build clutter
-    ```
+
+	```
+	cd C:\gtk-build\github\gtk-win32
+	python .\build.py build clutter
+	```
+
+## How to run gtk3-demo.exe on Windows
+	Copy Adwaita(https://github.com/hsccr/ccr/tree/master/gtk/Win32/share/icons/Adwaita) to ../share/icons
