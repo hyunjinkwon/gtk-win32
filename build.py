@@ -43,6 +43,13 @@ class MercurialRepo(object):
         print_log('Updating directory %s' % (self.build_dir,))
         self.exec_cmd('hg pull -u', working_dir=self.build_dir)
 
+class GitRepo(object):
+    def unpack(self):
+        print_log('Cloning %s to %s' % (self.repo_url, self.build_dir))
+        self.exec_cmd('git clone %s %s-tmp' % (self.repo_url, self.build_dir))
+        shutil.move(self.build_dir + '-tmp', self.build_dir)
+        print_log('Cloned %s to %s' % (self.repo_url, self.build_dir))
+
 class Project(object):
     def __init__(self, name, **kwargs):
         object.__init__(self)
@@ -151,13 +158,55 @@ class Project(object):
     def get_dict():
         return dict(Project._dict)
 
+class GitProject(Tarball, Project):
+    def __init__(self, name, **kwargs):
+        Project.__init__(self, name, **kwargs)
+
+    def build(self):
+		 print_log('GitProject downloaded.')
+
+class DownloadGitProject(GitRepo, GitProject):
+    def __init__(self, name, **kwargs):
+        GitProject.__init__(self, name, **kwargs)
+
+class ProtoBufCmakeBuildProject(Tarball, Project):
+    def __init__(self, name, **kwargs):
+        Project.__init__(self, name, **kwargs)
+
+    def build(self):		
+        cmake_config = 'Debug' if self.builder.opts.configuration == 'debug' else 'RelWithDebInfo'
+        self.exec_vs('cmake -G "NMake Makefiles" -DPROTOBUF_ROOT=..\protobuf -DCMAKE_INSTALL_PREFIX="%(pkg_dir)s" -DGTK_DIR="%(gtk_dir)s" -DCMAKE_BUILD_TYPE=' + cmake_config, add_path=self.builder.opts.cmake_path)
+        self.exec_vs('nmake /nologo', add_path=self.builder.opts.cmake_path)
+        self.exec_vs('nmake /nologo install', add_path=self.builder.opts.cmake_path)
+
+class ProtoBufCmake(GitRepo, ProtoBufCmakeBuildProject):
+    def __init__(self, name, **kwargs):
+        ProtoBufCmakeBuildProject.__init__(self, name, **kwargs)
+
+class ProtoBufCBuildProject(Tarball, Project):
+    def __init__(self, name, **kwargs):
+        Project.__init__(self, name, **kwargs)
+
+    def build(self):
+        cmake_config = 'Debug' if self.builder.opts.configuration == 'debug' else 'RelWithDebInfo'
+        self.exec_vs(r'cmake .\build-cmake\ -G "NMake Makefiles" -DCMAKE_INSTALL_PREFIX="%(gtk_dir)s" -DGTK_DIR="%(pkg_dir)s" -DCMAKE_BUILD_TYPE=' + cmake_config,add_path=self.builder.opts.cmake_path)
+        self.exec_vs(r'nmake /nologo', add_path=self.builder.opts.cmake_path)
+        self.exec_vs(r'nmake /nologo install', add_path=self.builder.opts.cmake_path)
+
+class ProtoBufC(GitRepo, ProtoBufCBuildProject):
+    def __init__(self, name, **kwargs):
+        ProtoBufCBuildProject.__init__(self, name, **kwargs)
+
+#Project.add(DownloadGitProject('protobuf', repo_url='https://github.com/google/protobuf.git', dependencies = []))
+Project.add(DownloadGitProject('protobuf', repo_url='https://github.com/alex85k/protobuf.git', dependencies = []))
+Project.add(ProtoBufCmake('protobuf-cmake', repo_url='https://github.com/alex85k/protobuf-cmake.git', dependencies = ['protobuf']))
+Project.add(ProtoBufC('protobuf-c',  repo_url='https://github.com/alex85k/protobuf-c.git', dependencies = ['protobuf-cmake']))
+
 class Project_clutter(Tarball, Project):
     def __init__(self):
         Project.__init__(self,
             'clutter',
 			archive_url = 'http://ftp.acc.umu.se/pub/GNOME/sources/clutter/1.24/clutter-1.24.2.tar.xz',
-            #archive_url = 'http://ftp.acc.umu.se/pub/GNOME/sources/clutter/1.25/clutter-1.25.6.tar.xz',
-			#dependencies = ['atk','cogl','json-glib'],
 			dependencies = ['atk','cogl','json-glib'],
             )
 
