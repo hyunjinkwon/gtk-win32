@@ -197,6 +197,20 @@ class ProtoBufC(GitRepo, ProtoBufCBuildProject):
     def __init__(self, name, **kwargs):
         ProtoBufCBuildProject.__init__(self, name, **kwargs)
 
+class GitMsBuildProject(Tarball, Project):
+    def __init__(self, name, **kwargs):
+        Project.__init__(self, name, **kwargs)
+
+    def build(self):
+        self.exec_msbuild(self.name + r'.sln')
+
+class GitMsBuild(GitRepo, GitMsBuildProject):
+    def __init__(self, name, **kwargs):
+        GitMsBuildProject.__init__(self, name, **kwargs)
+
+
+Project.add(GitMsBuild('json-c',  repo_url='https://github.com/json-c/json-c.git', dependencies = []))
+
 #Project.add(DownloadGitProject('protobuf', repo_url='https://github.com/google/protobuf.git', dependencies = []))
 Project.add(DownloadGitProject('protobuf', repo_url='https://github.com/alex85k/protobuf.git', dependencies = []))
 Project.add(ProtoBufCmake('protobuf-cmake', repo_url='https://github.com/alex85k/protobuf-cmake.git', dependencies = ['protobuf']))
