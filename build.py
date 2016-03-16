@@ -208,6 +208,18 @@ class GitMsBuild(GitRepo, GitMsBuildProject):
     def __init__(self, name, **kwargs):
         GitMsBuildProject.__init__(self, name, **kwargs)
 
+class Project_libmicrohttpd(Tarball, Project):
+    def __init__(self):
+        Project.__init__(self,
+            'libmicrohttpd',
+			archive_url = 'http://ftp.gnu.org/gnu/libmicrohttpd/libmicrohttpd-0.9.48.tar.gz',
+			dependencies = [],
+            )
+
+    def build(self):
+        self.exec_msbuild(r'w32\vs%(vs_ver)s\libmicrohttpd.sln')
+
+Project.add(Project_libmicrohttpd())
 
 Project.add(GitMsBuild('json-c',  repo_url='https://github.com/json-c/json-c.git', dependencies = []))
 
