@@ -202,7 +202,7 @@ class GitMsBuildProject(Tarball, Project):
         Project.__init__(self, name, **kwargs)
 
     def build(self):
-        self.exec_msbuild(self.name + r'.sln')
+        self.exec_msbuild(r'.\build\win32\vs%s\%s.sln' % (self.builder.opts.vs_ver,self.name,))
 
 class GitMsBuild(GitRepo, GitMsBuildProject):
     def __init__(self, name, **kwargs):
