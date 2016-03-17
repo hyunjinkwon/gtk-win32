@@ -217,7 +217,7 @@ class Project_libmicrohttpd(Tarball, Project):
             )
 
     def build(self):
-        self.exec_msbuild(r'w32\vs%(vs_ver)s\libmicrohttpd.sln')
+        self.exec_msbuild(r'build\win32\vs%(vs_ver)s\libmicrohttpd.sln')
 
 Project.add(GitMsBuild('leveldb',  repo_url='https://github.com/chirino/leveldb.git', dependencies = []))
 
