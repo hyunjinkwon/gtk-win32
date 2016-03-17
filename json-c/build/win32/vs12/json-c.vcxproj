@@ -93,7 +93,7 @@
       <Message>copy config.h from Windows template instead of calling configure</Message>
     </PreBuildEvent>
     <Lib>
-      <OutputFile>$(OutDir)$(JsonCDllPrefix)$(ProjectName)$(JsonCDllSuffix).lib</OutputFile>
+      <OutputFile>$(OutDir)$(PrjDllPrefix)$(ProjectName)$(PrjDllSuffix).lib</OutputFile>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -129,7 +129,7 @@ copy..\..\..\ json_config.h.win32..\..\..\ json_config.h
       <Message>copy config.h from Windows template instead of calling configure</Message>
     </PreBuildEvent>
     <Lib>
-      <OutputFile>$(OutDir)$(JsonCDllPrefix)$(ProjectName)$(JsonCDllSuffix).lib</OutputFile>
+      <OutputFile>$(OutDir)$(PrjDllPrefix)$(ProjectName)$(PrjDllSuffix).lib</OutputFile>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
