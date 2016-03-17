@@ -208,6 +208,8 @@ class GitMsBuild(GitRepo, GitMsBuildProject):
     def __init__(self, name, **kwargs):
         GitMsBuildProject.__init__(self, name, **kwargs)
 
+Project.add(GitMsBuild('leveldb',  repo_url='https://github.com/chirino/leveldb.git', dependencies = []))
+
 class Project_libmicrohttpd(Tarball, Project):
     def __init__(self):
         Project.__init__(self,
@@ -218,8 +220,6 @@ class Project_libmicrohttpd(Tarball, Project):
 
     def build(self):
         self.exec_msbuild(r'build\win32\vs%(vs_ver)s\libmicrohttpd.sln')
-
-Project.add(GitMsBuild('leveldb',  repo_url='https://github.com/chirino/leveldb.git', dependencies = []))
 
 Project.add(Project_libmicrohttpd())
 
