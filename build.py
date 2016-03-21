@@ -1224,7 +1224,7 @@ def get_options(args):
     if not opts.patches_root_dir:
         opts.patches_root_dir = os.path.join(args.build_dir, 'github', 'gtk-win32')
     if not opts.vs_install_path:
-        opts.vs_install_path = r'C:\Program Files\Microsoft Visual Studio %s.0' % (opts.vs_ver,)
+        opts.vs_install_path = r'C:\Program Files (x86)\Microsoft Visual Studio %s.0' % (opts.vs_ver,)
 
     opts.projects = args.project
 
@@ -1307,13 +1307,13 @@ Examples:
     p_build = subparsers.add_parser('build', help='build project(s)')
     p_build.set_defaults(func=do_build)
 
-    p_build.add_argument('-p', '--platform', default='x86', choices=['x86', 'x64'],
+    p_build.add_argument('-p', '--platform', default='x64', choices=['x86', 'x64'],
                          help='Platform to build for, x86 or x64. Default is x86.')
     #p_build.add_argument('-c', '--configuration', default='release', choices=['release', 'debug'],
     #                     help='Configuration to build, release or debug. Default is release.')
     p_build.add_argument('--build-dir', default=r'C:\gtk-build',
                          help='The directory where the sources will be downloaded and built.')
-    p_build.add_argument('--msys-dir', default=r'C:\Msys32',
+    p_build.add_argument('--msys-dir', default=r'C:\Msys64',
                          help='The directory where you installed msys2.')
     p_build.add_argument('--archives-download-dir',
                          help="The directory to download the source archives to. It will be created. " +
@@ -1324,12 +1324,12 @@ Examples:
     p_build.add_argument('--vs-ver', default='12',
                          help="Visual Studio version 10,12, etc. Default is 12.")
     p_build.add_argument('--vs-install-path',
-                         help=r"The directory where you installed Visual Studio. Default is 'C:\Program Files\Microsoft Visual Studio $(build-ver).0'")
+                         help=r"The directory where you installed Visual Studio. Default is 'C:\Program Files (x86)\Microsoft Visual Studio $(build-ver).0'")
     p_build.add_argument('--cmake-path', default=r'C:\CMake\bin',
                          help="The directory where you installed cmake.")
     p_build.add_argument('--perl-dir', default=r'C:\Perl',
                          help="The directory where you installed perl.")
-    p_build.add_argument('--python-dir', default=r'c:\Python27',
+    p_build.add_argument('--python-dir', default=r'C:\Python27',
                          help="The directory where you installed python.")
 
     p_build.add_argument('--clean', default=False, action='store_true',
