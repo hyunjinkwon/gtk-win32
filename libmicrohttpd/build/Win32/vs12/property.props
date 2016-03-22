@@ -35,10 +35,10 @@
       mkdir $(CopyDir)\lib
 
       copy $(BinDir)\*.lib $(CopyDir)\lib
-      
+
       mkdir $(CopyDir)\include\libmicrohttpd-$(ApiVersion)\libmicrohttpd
 
-      copy $(SolDir)\src\microhttpd\*.h $(CopyDir)\include\libmicrohttpd-$(ApiVersion)\libmicrohttpd
+      copy $(BinDir)\*.h $(CopyDir)\include\libmicrohttpd-$(ApiVersion)\libmicrohttpd
 
 
     </PrjDoInstall>
