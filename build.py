@@ -175,7 +175,7 @@ class ProtoBufCmakeBuildProject(Tarball, Project):
 
     def build(self):		
         cmake_config = 'Debug' if self.builder.opts.configuration == 'debug' else 'RelWithDebInfo'
-        self.exec_vs('cmake -G "NMake Makefiles" -DPROTOBUF_ROOT=..\protobuf -DCMAKE_INSTALL_PREFIX="%(pkg_dir)s" -DGTK_DIR="%(gtk_dir)s" -DCMAKE_BUILD_TYPE=' + cmake_config, add_path=self.builder.opts.cmake_path)
+        self.exec_vs('cmake -G "NMake Makefiles" -DPROTOBUF_ROOT="../protobuf" -DCMAKE_INSTALL_PREFIX="%(pkg_dir)s" -DGTK_DIR="%(gtk_dir)s" -DCMAKE_BUILD_TYPE=' + cmake_config, add_path=self.builder.opts.cmake_path)
         self.exec_vs('nmake /nologo', add_path=self.builder.opts.cmake_path)
         self.exec_vs('nmake /nologo install', add_path=self.builder.opts.cmake_path)
 
@@ -225,10 +225,34 @@ Project.add(Project_libmicrohttpd())
 
 Project.add(GitMsBuild('json-c',  repo_url='https://github.com/json-c/json-c.git', dependencies = []))
 
-#Project.add(DownloadGitProject('protobuf', repo_url='https://github.com/google/protobuf.git', dependencies = []))
-Project.add(DownloadGitProject('protobuf', repo_url='https://github.com/alex85k/protobuf.git', dependencies = []))
-Project.add(ProtoBufCmake('protobuf-cmake', repo_url='https://github.com/alex85k/protobuf-cmake.git', dependencies = ['protobuf']))
-Project.add(ProtoBufC('protobuf-c',  repo_url='https://github.com/alex85k/protobuf-c.git', dependencies = ['protobuf-cmake']))
+class Project_protobufc(Tarball, Project):
+    def __init__(self):
+        Project.__init__(self,
+            'protobuf-c',
+			archive_url = 'https://github.com/protobuf-c/protobuf-c/releases/download/v1.2.1/protobuf-c-1.2.1.tar.gz',
+			dependencies = ['protobuf'],
+            )
+
+    def build(self):
+        cmake_config = 'Debug' if self.builder.opts.configuration == 'debug' else 'RelWithDebInfo'
+        self.exec_vs(r'cmake .\build-cmake\ -G "NMake Makefiles" -DPROTOBUF_ROOT=..\protobuf -DCMAKE_INSTALL_PREFIX="%(gtk_dir)s" -DGTK_DIR="%(pkg_dir)s" -DCMAKE_BUILD_TYPE=' + cmake_config,add_path=self.builder.opts.cmake_path)
+        self.exec_vs(r'nmake /nologo', add_path=self.builder.opts.cmake_path)
+        self.exec_vs(r'nmake /nologo install', add_path=self.builder.opts.cmake_path)
+
+Project.add(Project_protobufc())
+
+class Project_protobuf(Tarball, Project):
+    def __init__(self):
+        Project.__init__(self,
+            'protobuf',
+			archive_url = 'https://github.com/google/protobuf/releases/download/v2.6.0/protobuf-2.6.0.tar.gz',
+			dependencies = [],
+            )
+
+    def build(self):
+        self.exec_msbuild(r'vs%(vs_ver)s\protobuf.sln')
+
+Project.add(Project_protobuf())
 
 class Project_clutter(Tarball, Project):
     def __init__(self):
