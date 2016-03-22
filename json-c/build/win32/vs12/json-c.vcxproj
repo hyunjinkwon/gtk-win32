@@ -58,18 +58,6 @@
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
-  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-  </ImportGroup>
-  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-  </ImportGroup>
-  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-  </ImportGroup>
-  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-  </ImportGroup>
   <Import Project="json-c.props" />
   <Import Project="..\..\..\..\stack.props" />
   <PropertyGroup Label="UserMacros" />
@@ -107,13 +95,14 @@
       <CompileAs>CompileAsCpp</CompileAs>
     </ClCompile>
     <PreBuildEvent>
-      <Command>copy ..\..\..\config.h.win32 ..\..\..\config.h
-copy..\..\..\ json_config.h.win32..\..\..\ json_config.h
-</Command>
+      <Command>$(PreBuildCfg)</Command>
     </PreBuildEvent>
     <PreBuildEvent>
       <Message>copy config.h from Windows template instead of calling configure</Message>
     </PreBuildEvent>
+    <Lib>
+      <OutputFile>$(OutDir)$(PrjDllPrefix)$(ProjectName)$(PrjDllSuffix).lib</OutputFile>
+    </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -140,13 +129,14 @@ copy..\..\..\ json_config.h.win32..\..\..\ json_config.h
       <CompileAs>CompileAsCpp</CompileAs>
     </ClCompile>
     <PreBuildEvent>
-      <Command>copy config.h.win32 config.h
-copy json_config.h.win32 json_config.h
-</Command>
+      <Command>$(PreBuildCfg)</Command>
     </PreBuildEvent>
     <PreBuildEvent>
       <Message>copy config.h from Windows template instead of calling configure</Message>
     </PreBuildEvent>
+    <Lib>
+      <OutputFile>$(OutDir)$(PrjDllPrefix)$(ProjectName)$(PrjDllSuffix).lib</OutputFile>
+    </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\arraylist.c" />
