@@ -76,6 +76,43 @@ HexChat developers decided that their script should focus on their specific need
 	cd C:\gtk-build\github\gtk-win32
 	python .\build.py build clutter
 	```
+		
+4.Protobuf-c
+
+	```
+	cd C:\gtk-build\github\gtk-win32
+	python .\build.py build protobuf-c
+	```
+	
+5.Json-c
+
+	```
+	cd C:\gtk-build\github\gtk-win32
+	python .\build.py build json-c
+	```
+	
+6.Libmicrohttpd
+
+	```
+	cd C:\gtk-build\github\gtk-win32
+	python .\build.py build libmicrohttpd
+	```
+	
+7.Leveldb
+
+	```
+	cd C:\gtk-build\github\gtk-win32
+	python .\build.py build leveldb
+	```
+	
+## How to build all?
+
+	```
+	cd C:\gtk-build\github\gtk-win32
+	buildall.bat
+	```
+
+
 
 ## How to run gtk3-demo.exe on Windows
 	Copy Adwaita(https://github.com/hsccr/ccr/tree/master/gtk/Win32/share/icons/Adwaita) to ../share/icons
