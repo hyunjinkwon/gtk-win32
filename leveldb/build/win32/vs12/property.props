@@ -10,9 +10,9 @@
     <ObjDir>$(SolutionDir)$(Configuration)\$(PlatformName)\obj\$(ProjectName)</ObjDir>
     <SolDir>..\..\..</SolDir>
     <PrjLibtoolCompatibleDllPrefix>lib</PrjLibtoolCompatibleDllPrefix>
-    <PrjLibtoolCompatibleDllSuffix>-$(ApiVersion)</PrjLibtoolCompatibleDllSuffix>
+    <PrjLibtoolCompatibleDllSuffix></PrjLibtoolCompatibleDllSuffix>
     <PrjSeparateDllPrefix />
-    <PrjSeparateDllSuffix>-$(ApiVersion)</PrjSeparateDllSuffix>
+    <PrjSeparateDllSuffix></PrjSeparateDllSuffix>
     <PrjDllPrefix>$(PrjSeparateDllPrefix)</PrjDllPrefix>
     <PrjDllSuffix>$(PrjSeparateDllSuffix)</PrjDllSuffix>
 
