@@ -13,6 +13,6 @@ SET VCTargetsPath=C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\V120
 
 cd C:\gtk-build\github\gtk-win32
 
-python build.py build gtk3 clutter protobuf-c json-c libmicrohttpd leveldb -p x86
+python build.py build gtk3 clutter protobuf-c json-c libmicrohttpd leveldb libzip -p x86
 
-python build.py build gtk3 clutter protobuf-c json-c libmicrohttpd leveldb -p x64
+python build.py build gtk3 clutter protobuf-c json-c libmicrohttpd leveldb libzip -p x64
