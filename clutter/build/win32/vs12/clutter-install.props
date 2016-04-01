@@ -118,6 +118,7 @@ copy ..\..\..\clutter\clutter-units.h $(CopyDir)\include\clutter-$(ApiVersion)\c
 copy ..\..\..\clutter\clutter-version.h $(CopyDir)\include\clutter-$(ApiVersion)\clutter
 copy ..\..\..\clutter\clutter-zoom-action.h $(CopyDir)\include\clutter-$(ApiVersion)\clutter
 copy ..\..\..\clutter\win32\clutter-win32.h $(CopyDir)\include\clutter-$(ApiVersion)\clutter\win32
+copy ..\..\..\clutter\clutter-autocleanups.h $(CopyDir)\include\clutter-$(ApiVersion)\clutter
 
 mkdir $(CopyDir)\include\clutter-$(ApiVersion)\clutter\deprecated
 copy ..\..\..\clutter\deprecated\clutter-actor.h $(CopyDir)\include\clutter-$(ApiVersion)\clutter\deprecated
@@ -155,6 +156,8 @@ copy ..\..\..\clutter\deprecated\clutter-texture.h $(CopyDir)\include\clutter-$(
 copy ..\..\..\clutter\deprecated\clutter-timeline.h $(CopyDir)\include\clutter-$(ApiVersion)\clutter\deprecated
 copy ..\..\..\clutter\deprecated\clutter-timeout-pool.h $(CopyDir)\include\clutter-$(ApiVersion)\clutter\deprecated
 copy ..\..\..\clutter\deprecated\clutter-util.h $(CopyDir)\include\clutter-$(ApiVersion)\clutter\deprecated
+copy ..\..\..\clutter\deprecated\clutter-model.h $(CopyDir)\include\clutter-$(ApiVersion)\clutter\deprecated
+copy ..\..\..\clutter\deprecated\clutter-list-model.h $(CopyDir)\include\clutter-$(ApiVersion)\clutter\deprecated
 
 mkdir $(CopyDir)\include\clutter-$(ApiVersion)\cally
 copy ..\..\..\clutter\cally\cally-actor.h $(CopyDir)\include\clutter-$(ApiVersion)\cally
