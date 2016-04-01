@@ -16,3 +16,9 @@ cd C:\gtk-build\github\gtk-win32
 python build.py build gtk3 clutter protobuf-c json-c libmicrohttpd leveldb libzip -p x86
 
 python build.py build gtk3 clutter protobuf-c json-c libmicrohttpd leveldb libzip -p x64
+
+cd C:\gtk-build\gtk
+
+rename Win32 win32
+
+rename x64 win64
