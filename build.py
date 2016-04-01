@@ -208,6 +208,22 @@ class GitMsBuild(GitRepo, GitMsBuildProject):
     def __init__(self, name, **kwargs):
         GitMsBuildProject.__init__(self, name, **kwargs)
 
+class Project_libzip(Tarball, Project):
+    def __init__(self):
+        Project.__init__(self,
+            'libzip',
+            archive_url = 'http://nih.at/libzip/libzip-1.1.2.tar.gz',
+            dependencies = [],
+            )
+
+    def build(self):
+        cmake_config = 'Debug' if self.builder.opts.configuration == 'debug' else 'RelWithDebInfo'
+        self.exec_vs(r'cmake -G "NMake Makefiles" -DCMAKE_INSTALL_PREFIX="%(gtk_dir)s" -DGTK_DIR="%(pkg_dir)s" -DCMAKE_BUILD_TYPE=' + cmake_config,add_path=self.builder.opts.cmake_path)
+        self.exec_vs(r'nmake /nologo', add_path=self.builder.opts.cmake_path)
+        self.exec_vs(r'nmake /nologo install', add_path=self.builder.opts.cmake_path)
+
+Project.add(Project_libzip())
+
 Project.add(GitMsBuild('leveldb',  repo_url='https://github.com/google/leveldb.git', dependencies = []))
 
 class Project_libmicrohttpd(Tarball, Project):
