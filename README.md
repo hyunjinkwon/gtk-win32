@@ -7,6 +7,7 @@ The powershell script was originally [developed by the HexChat developers](https
 HexChat developers decided that their script should focus on their specific needs, this fork tries to be a bit more generic, in particular it pursues the following goals
 
 1. Build GTK+ 3 - we want to focus on the current version of GTK
+1. Build Clutter and misc libraries
 1. Support multiple version of Visual Studio - at the moment we are focusing on VS 2013, but we include projects for other versions and we gladly accept patches
 1. We try to follow as much as possible the conventions of the upstream MSVC projects by Fan Chun-wei - [Compiling the GTK+ (and Clutter) stack using Visual C++ 2008 and later](https://wiki.gnome.org/action/show/Projects/GTK+/Win32/MSVCCompilationOfGTKStack).
 1. We are pretty liberal about adding more libraries to the script - at some point we will need to make the set of libraries that are built configurable and easily extensible, but right now we are ok with adding libraries that are useful to the users of this script
@@ -54,65 +55,21 @@ HexChat developers decided that their script should focus on their specific need
 
 1. When the script is done, your GTK+ stack will be found under _C:\gtk-build\gtk_. Enjoy!
 
-## Add Module
+## Added Modules
 
-1.Json-Glib
+Added moudles to original GTK+ 3 projects.
 
-	```
-	cd C:\gtk-build\github\gtk-win32
-	python .\build.py build json-glib
-	```
-
-2.Cogl
-
-	```
-	cd C:\gtk-build\github\gtk-win32
-	python .\build.py build cogl
-	```
-
-3.Clutter
-
-	```
-	cd C:\gtk-build\github\gtk-win32
-	python .\build.py build clutter
-	```
-		
-4.Protobuf-c
-
-	```
-	cd C:\gtk-build\github\gtk-win32
-	python .\build.py build protobuf-c
-	```
-	
-5.Json-c
-
-	```
-	cd C:\gtk-build\github\gtk-win32
-	python .\build.py build json-c
-	```
-	
-6.Libmicrohttpd
-
-	```
-	cd C:\gtk-build\github\gtk-win32
-	python .\build.py build libmicrohttpd
-	```
-	
-7.Leveldb
-
-	```
-	cd C:\gtk-build\github\gtk-win32
-	python .\build.py build leveldb
-	```
+    ```
+    json-glib cogl clutter protobuf-c json-c libmicrohttpd leveldb libzip
+    ````
 	
 ## How to build all?
 
-	```
-	cd C:\gtk-build\github\gtk-win32
-	buildall.bat
-	```
-
-
+    ```
+    cd C:\gtk-build\github\gtk-win32
+    buildall.bat
+    ```
 
 ## How to run gtk3-demo.exe on Windows
-	Copy Adwaita(https://github.com/hsccr/ccr/tree/master/gtk/Win32/share/icons/Adwaita) to ../share/icons
+
+Copy Adwaita(`https://github.com/hsccr/ccr/tree/master/gtk/Win32/share/icons/Adwaita`) to `share/icons`.
