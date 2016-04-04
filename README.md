@@ -17,11 +17,11 @@ HexChat developers decided that their script should focus on their specific need
 
 1. Install the following build tools and dependencies:
 
-    * [Visual Studio 2013 Express for Windows Desktop](http://www.visualstudio.com/downloads/download-visual-studio-vs#d-2013-express) - Any version of VS apart from 2013 is not supported.
-    * [CMake 3.0.2](http://www.cmake.org/download/) (also works with CMake 2.8.x)
-    * [msys2](https://msys2.github.io/)
-    * Perl 5.20 [x86](https://dl.hexchat.net/misc/perl/perl-5.20.0-x86.7z) or [x64](https://dl.hexchat.net/misc/perl/perl-5.20.0-x64.7z) (extract to _C:\perl_)
-    * [Python 2.7](https://www.python.org/ftp/python/2.7.9/python-2.7.9.amd64.msi) (install in C:\Python27)
+  * [Visual Studio 2013 Express for Windows Desktop](http://www.visualstudio.com/downloads/download-visual-studio-vs#d-2013-express) - Any version of VS apart from 2013 is not supported.
+  * [CMake 3.0.2](http://www.cmake.org/download/) (also works with CMake 2.8.x)
+  * [msys2](https://msys2.github.io/)
+  * Perl 5.20 [x86](https://dl.hexchat.net/misc/perl/perl-5.20.0-x86.7z) or [x64](https://dl.hexchat.net/misc/perl/perl-5.20.0-x64.7z) (extract to _C:\perl_)
+  * [Python 2.7](https://www.python.org/ftp/python/2.7.9/python-2.7.9.amd64.msi) (install in C:\Python27)
 
 1. Follow the instructions on the msys2 page to update the core packages.
 
@@ -59,17 +59,17 @@ HexChat developers decided that their script should focus on their specific need
 
 Added moudles to original GTK+ 3 projects.
 
-    ```
-    json-glib cogl clutter protobuf-c json-c libmicrohttpd leveldb libzip
-    ````
-	
+```
+json-glib cogl clutter protobuf-c json-c libmicrohttpd leveldb libzip
+```
+
 ## How to build all?
 
-    ```
-    cd C:\gtk-build\github\gtk-win32
-    buildall.bat
-    ```
+```
+cd C:\gtk-build\github\gtk-win32
+buildall.bat
+```
 
 ## How to run gtk3-demo.exe on Windows
 
-Copy Adwaita(`https://github.com/hsccr/ccr/tree/master/gtk/Win32/share/icons/Adwaita`) to `share/icons`.
+Copy Adwaita theme icons(`https://github.com/hsccr/ccr/tree/master/gtk/Win32/share/icons/Adwaita`) to `share/icons`.
