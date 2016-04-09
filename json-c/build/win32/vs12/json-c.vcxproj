@@ -73,6 +73,8 @@
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <CompileAs>CompileAsCpp</CompileAs>
+      <ProgramDataBaseFileName>$(OutDir)$(PrjDllPrefix)$(ProjectName)$(PrjDllSuffix).pdb</ProgramDataBaseFileName>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
     </ClCompile>
     <PreBuildEvent>
       <Command>$(PreBuildCfg)</Command>
@@ -93,6 +95,8 @@
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <CompileAs>CompileAsCpp</CompileAs>
+      <ProgramDataBaseFileName>$(OutDir)$(PrjDllPrefix)$(ProjectName)$(PrjDllSuffix).pdb</ProgramDataBaseFileName>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
     </ClCompile>
     <PreBuildEvent>
       <Command>$(PreBuildCfg)</Command>
@@ -110,6 +114,7 @@
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <CompileAs>CompileAsCpp</CompileAs>
+      <ProgramDataBaseFileName>$(OutDir)$(PrjDllPrefix)$(ProjectName)$(PrjDllSuffix).pdb</ProgramDataBaseFileName>
     </ClCompile>
     <PreBuildEvent>
       <Command>$(PreBuildCfg)</Command>
@@ -127,6 +132,7 @@
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <CompileAs>CompileAsCpp</CompileAs>
+      <ProgramDataBaseFileName>$(OutDir)$(PrjDllPrefix)$(ProjectName)$(PrjDllSuffix).pdb</ProgramDataBaseFileName>
     </ClCompile>
     <PreBuildEvent>
       <Command>$(PreBuildCfg)</Command>
