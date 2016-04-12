@@ -208,6 +208,35 @@ class GitMsBuild(GitRepo, GitMsBuildProject):
     def __init__(self, name, **kwargs):
         GitMsBuildProject.__init__(self, name, **kwargs)
 
+class Project_libuv(Tarball, Project):
+    def __init__(self):
+        Project.__init__(self,
+            'libuv',
+            archive_url = 'https://github.com/libuv/libuv/archive/libuv-1.9.0.tar.gz',
+            dependencies = [],
+            )
+
+    def build(self):
+         self.exec_msbuild(r'build\vs%(vs_ver)s\uv.sln')
+
+Project.add(Project_libuv())
+
+class Project_libcurl(Tarball, Project):
+    def __init__(self):
+        Project.__init__(self,
+            'libcurl',
+            archive_url = 'https://github.com/curl/curl/archive/curl-curl-7_48_0.tar.gz',
+            dependencies = [],
+            )
+
+    def build(self):
+        cmake_config = 'Debug' if self.builder.opts.configuration == 'debug' else 'RelWithDebInfo'
+        self.exec_vs(r'cmake -G "NMake Makefiles" -DCMAKE_INSTALL_PREFIX="%(gtk_dir)s" -DGTK_DIR="%(pkg_dir)s" -DCMAKE_BUILD_TYPE=' + cmake_config,add_path=self.builder.opts.cmake_path)
+        self.exec_vs(r'nmake /nologo', add_path=self.builder.opts.cmake_path)
+        self.exec_vs(r'nmake /nologo install', add_path=self.builder.opts.cmake_path)
+
+Project.add(Project_libcurl())
+
 class Project_libzip(Tarball, Project):
     def __init__(self):
         Project.__init__(self,
@@ -224,7 +253,18 @@ class Project_libzip(Tarball, Project):
 
 Project.add(Project_libzip())
 
-Project.add(GitMsBuild('leveldb',  repo_url='https://github.com/google/leveldb.git', dependencies = []))
+class Project_leveldb(Tarball, Project):
+    def __init__(self):
+        Project.__init__(self,
+            'leveldb',
+            archive_url = 'https://github.com/google/leveldb/archive/leveldb-1.18.tar.gz',
+            dependencies = [],
+            )
+
+    def build(self):
+        self.exec_msbuild(r'build\win32\vs%(vs_ver)s\leveldb.sln')
+
+Project.add(Project_leveldb())
 
 class Project_libmicrohttpd(Tarball, Project):
     def __init__(self):
