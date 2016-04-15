@@ -60,7 +60,7 @@ HexChat developers decided that their script should focus on their specific need
 Added moudles to original GTK+ 3 projects.
 
 ```
-json-glib cogl clutter protobuf-c json-c libmicrohttpd leveldb libzip
+json-glib cogl clutter protobuf-c json-c libmicrohttpd leveldb libzip libcurl libuv
 ```
 
 ## How to build all?
