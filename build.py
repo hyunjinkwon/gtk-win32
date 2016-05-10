@@ -211,6 +211,23 @@ class GitMsBuild(GitRepo, GitMsBuildProject):
     def __init__(self, name, tar_name, **kwargs):
         GitMsBuildProject.__init__(self, name, tar_name, **kwargs)
 
+class Project_libssh2(Tarball, Project):
+    def __init__(self):
+        Project.__init__(self,
+            'libssh2',
+            'libssh2-1.7.0',
+            archive_url = 'https://www.libssh2.org/download/libssh2-1.7.0.tar.gz',
+            dependencies = [],
+            )
+
+    def build(self):
+        cmake_config = 'Debug' if self.builder.opts.configuration == 'debug' else 'RelWithDebInfo'
+        self.exec_vs(r'cmake -G"NMake Makefiles" -DCMAKE_INSTALL_PREFIX="%(gtk_dir)s" -DGTK_DIR="%(pkg_dir)s" -DWITH_ZLIB=ON -DCMAKE_BUILD_TYPE=' + cmake_config,add_path=self.builder.opts.cmake_path)
+        self.exec_vs(r'nmake /nologo', add_path=self.builder.opts.cmake_path)
+        self.exec_vs(r'nmake /nologo install', add_path=self.builder.opts.cmake_path)
+
+Project.add(Project_libssh2())
+
 class Project_libuv(Tarball, Project):
     def __init__(self):
         Project.__init__(self,
