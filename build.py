@@ -15,8 +15,10 @@ class Tarball(object):
             self.builder.exec_msys([self.builder.tar, 'ixf', self.__convert_to_msys(self.archive_file), '-C', self.__convert_to_msys(self.builder.working_dir)])
             archive_name = os.path.basename(self.archive_file)
             out_dir = re.match(r'(.*)\.tar', archive_name).group(1)
+            out_dir = self.tar_name
             if not os.path.exists(os.path.join(self.builder.working_dir, out_dir)):
                 out_dir = self.name + '-' + out_dir
+            print_log('before move %s %s' % (os.path.join(self.builder.working_dir, out_dir),self.name))
             shutil.move(os.path.join(self.builder.working_dir, out_dir), self.build_dir)
         else:
             # gettext-runtime is a tarbomb
@@ -51,9 +53,10 @@ class GitRepo(object):
         print_log('Cloned %s to %s' % (self.repo_url, self.build_dir))
 
 class Project(object):
-    def __init__(self, name, **kwargs):
+    def __init__(self, name, tar_name, **kwargs):
         object.__init__(self)
         self.name = name
+        self.tar_name = tar_name
         self.dependencies = []
         self.patches = []
         self.archive_url = None
@@ -159,19 +162,19 @@ class Project(object):
         return dict(Project._dict)
 
 class GitProject(Tarball, Project):
-    def __init__(self, name, **kwargs):
-        Project.__init__(self, name, **kwargs)
+    def __init__(self, name, tar_name, **kwargs):
+        Project.__init__(self, name, tar_name, **kwargs)
 
     def build(self):
 		 print_log('GitProject downloaded.')
 
 class DownloadGitProject(GitRepo, GitProject):
-    def __init__(self, name, **kwargs):
-        GitProject.__init__(self, name, **kwargs)
+    def __init__(self, name, tar_name, **kwargs):
+        GitProject.__init__(self, name, tar_name, **kwargs)
 
 class ProtoBufCmakeBuildProject(Tarball, Project):
-    def __init__(self, name, **kwargs):
-        Project.__init__(self, name, **kwargs)
+    def __init__(self, name, tar_name, **kwargs):
+        Project.__init__(self, name, tar_name, **kwargs)
 
     def build(self):		
         cmake_config = 'Debug' if self.builder.opts.configuration == 'debug' else 'RelWithDebInfo'
@@ -180,12 +183,12 @@ class ProtoBufCmakeBuildProject(Tarball, Project):
         self.exec_vs('nmake /nologo install', add_path=self.builder.opts.cmake_path)
 
 class ProtoBufCmake(GitRepo, ProtoBufCmakeBuildProject):
-    def __init__(self, name, **kwargs):
-        ProtoBufCmakeBuildProject.__init__(self, name, **kwargs)
+    def __init__(self, name, tar_name, **kwargs):
+        ProtoBufCmakeBuildProject.__init__(self, name, tar_name, **kwargs)
 
 class ProtoBufCBuildProject(Tarball, Project):
-    def __init__(self, name, **kwargs):
-        Project.__init__(self, name, **kwargs)
+    def __init__(self, name, tar_name, **kwargs):
+        Project.__init__(self, name, tar_name, **kwargs)
 
     def build(self):
         cmake_config = 'Debug' if self.builder.opts.configuration == 'debug' else 'RelWithDebInfo'
@@ -194,25 +197,26 @@ class ProtoBufCBuildProject(Tarball, Project):
         self.exec_vs(r'nmake /nologo install', add_path=self.builder.opts.cmake_path)
 
 class ProtoBufC(GitRepo, ProtoBufCBuildProject):
-    def __init__(self, name, **kwargs):
-        ProtoBufCBuildProject.__init__(self, name, **kwargs)
+    def __init__(self, name, tar_name, **kwargs):
+        ProtoBufCBuildProject.__init__(self, name, tar_name, **kwargs)
 
 class GitMsBuildProject(Tarball, Project):
-    def __init__(self, name, **kwargs):
-        Project.__init__(self, name, **kwargs)
+    def __init__(self, name, tar_name, **kwargs):
+        Project.__init__(self, name, tar_name, **kwargs)
 
     def build(self):
         self.exec_msbuild(r'.\build\win32\vs%s\%s.sln' % (self.builder.opts.vs_ver,self.name,))
 
 class GitMsBuild(GitRepo, GitMsBuildProject):
-    def __init__(self, name, **kwargs):
-        GitMsBuildProject.__init__(self, name, **kwargs)
+    def __init__(self, name, tar_name, **kwargs):
+        GitMsBuildProject.__init__(self, name, tar_name, **kwargs)
 
 class Project_libuv(Tarball, Project):
     def __init__(self):
         Project.__init__(self,
             'libuv',
-            archive_url = 'https://github.com/libuv/libuv/archive/libuv-1.9.0.tar.gz',
+            'libuv-1.9.0',
+            archive_url = 'https://github.com/libuv/libuv/archive/v1.9.0.tar.gz',
             dependencies = [],
             )
 
@@ -225,7 +229,8 @@ class Project_libcurl(Tarball, Project):
     def __init__(self):
         Project.__init__(self,
             'libcurl',
-            archive_url = 'https://github.com/curl/curl/archive/curl-curl-7_48_0.tar.gz',
+            'curl-curl-7_48_0',
+            archive_url = 'https://github.com/curl/curl/archive/curl-7_48_0.tar.gz',
             dependencies = [],
             )
 
@@ -241,6 +246,7 @@ class Project_libzip(Tarball, Project):
     def __init__(self):
         Project.__init__(self,
             'libzip',
+            'libzip-1.1.2',
             archive_url = 'http://nih.at/libzip/libzip-1.1.2.tar.gz',
             dependencies = [],
             )
@@ -257,7 +263,8 @@ class Project_leveldb(Tarball, Project):
     def __init__(self):
         Project.__init__(self,
             'leveldb',
-            archive_url = 'https://github.com/google/leveldb/archive/leveldb-1.18.tar.gz',
+            'leveldb-1.18',
+            archive_url = 'http://github.com/google/leveldb/archive/v1.18.tar.gz',
             dependencies = [],
             )
 
@@ -270,8 +277,9 @@ class Project_libmicrohttpd(Tarball, Project):
     def __init__(self):
         Project.__init__(self,
             'libmicrohttpd',
-			archive_url = 'http://ftp.gnu.org/gnu/libmicrohttpd/libmicrohttpd-0.9.48.tar.gz',
-			dependencies = [],
+            'libmicrohttpd-0.9.48',
+             archive_url = 'http://ftp.gnu.org/gnu/libmicrohttpd/libmicrohttpd-0.9.48.tar.gz',
+	     dependencies = [],
             )
 
     def build(self):
@@ -279,12 +287,13 @@ class Project_libmicrohttpd(Tarball, Project):
 
 Project.add(Project_libmicrohttpd())
 
-Project.add(GitMsBuild('json-c',  repo_url='https://github.com/json-c/json-c.git', dependencies = []))
+Project.add(GitMsBuild('json-c', 'json-c',  repo_url='https://github.com/hsccr/json-c.git', dependencies = []))
 
 class Project_protobufc(Tarball, Project):
     def __init__(self):
         Project.__init__(self,
             'protobuf-c',
+            'protobuf-c-1.2.1',
 			archive_url = 'https://github.com/protobuf-c/protobuf-c/releases/download/v1.2.1/protobuf-c-1.2.1.tar.gz',
 			dependencies = ['protobuf'],
             )
@@ -301,6 +310,7 @@ class Project_protobuf(Tarball, Project):
     def __init__(self):
         Project.__init__(self,
             'protobuf',
+			'protobuf-2.6.0',
 			archive_url = 'https://github.com/google/protobuf/releases/download/v2.6.0/protobuf-2.6.0.tar.gz',
 			dependencies = [],
             )
@@ -314,6 +324,7 @@ class Project_clutter(Tarball, Project):
     def __init__(self):
         Project.__init__(self,
             'clutter',
+			'clutter-1.24.2',
 			archive_url = 'http://ftp.acc.umu.se/pub/GNOME/sources/clutter/1.24/clutter-1.24.2.tar.xz',
 			dependencies = ['atk','cogl','json-glib'],
             )
@@ -327,6 +338,7 @@ class Project_cogl(Tarball, Project):
     def __init__(self):
         Project.__init__(self,
             'cogl',
+			'cogl-1.22.0',
             archive_url = 'http://ftp.acc.umu.se/pub/GNOME/sources/cogl/1.22/cogl-1.22.0.tar.xz',
 			dependencies = ['glib','cairo','pango','gdk-pixbuf'],
             )
@@ -341,6 +353,7 @@ class Project_jsonglib(Tarball, Project):
     def __init__(self):
         Project.__init__(self,
             'json-glib',
+			'json-glib-1.1.2',
             archive_url = 'http://ftp.acc.umu.se/pub/GNOME/sources/json-glib/1.1/json-glib-1.1.2.tar.xz',
 			dependencies = ['glib'],
             )
@@ -354,6 +367,7 @@ class Project_atk(Tarball, Project):
     def __init__(self):
         Project.__init__(self,
             'atk',
+			'atk-2.18.0',
             archive_url = 'http://ftp.acc.umu.se/pub/GNOME/sources/atk/2.18/atk-2.18.0.tar.xz',
             dependencies = ['glib'],
             )
@@ -368,6 +382,7 @@ class Project_cairo(Tarball, Project):
     def __init__(self):
         Project.__init__(self,
             'cairo',
+			'cairo-1.15.2',
             archive_url = 'http://cairographics.org/snapshots/cairo-1.15.2.tar.xz',
             dependencies = ['fontconfig', 'glib', 'pixman'],
             )
@@ -382,6 +397,7 @@ class Project_cyrus_sasl(Tarball, Project):
     def __init__(self):
         Project.__init__(self,
             'cyrus-sasl',
+			'cyrus-sasl-2.1.27',
             archive_url = 'https://github.com/wingtk/cyrus-sasl/releases/download/cyrus-sasl-lmdb-2.1.27/cyrus-sasl-2.1.27.tar.gz',
             dependencies = ['lmdb', 'openssl'],
             )
@@ -399,6 +415,7 @@ class Project_enchant(Tarball, Project):
     def __init__(self):
         Project.__init__(self,
             'enchant',
+			'enchant-1.6.0',
             archive_url = 'http://dl.hexchat.net/gtk-win32/src/enchant-1.6.0.tar.gz',
             dependencies = ['glib'],
             )
@@ -452,6 +469,7 @@ class Project_ffmpeg(Tarball, Project):
     def __init__(self):
         Project.__init__(self,
             'ffmpeg',
+			'ffmpeg-2.8.4',
             archive_url = 'http://ffmpeg.org/releases/ffmpeg-2.8.4.tar.bz2',
             )
 
@@ -468,6 +486,7 @@ class Project_fontconfig(Tarball, Project):
     def __init__(self):
         Project.__init__(self,
             'fontconfig',
+			'fontconfig-2.11.1',
             archive_url = 'https://www.freedesktop.org/software/fontconfig/release/fontconfig-2.11.1.tar.gz',
             dependencies = ['freetype', 'libxml2'],
             patches = ['fontconfig.patch'],
@@ -511,6 +530,7 @@ class Project_freetype(Tarball, Project):
     def __init__(self):
         Project.__init__(self,
             'freetype',
+			'freetype-2.6',
             archive_url = 'http://dl.hexchat.net/gtk-win32/src/freetype-2.6.tar.bz2',
             )
 
@@ -526,6 +546,7 @@ class Project_gdk_pixbuf(Tarball, Project):
     def __init__(self):
         Project.__init__(self,
             'gdk-pixbuf',
+			'gdk-pixbuf-2.32.3',
             archive_url = 'http://ftp.acc.umu.se/pub/GNOME/sources/gdk-pixbuf/2.32/gdk-pixbuf-2.32.3.tar.xz',
             dependencies = ['glib', 'libpng'],
             )
@@ -540,6 +561,7 @@ class Project_gettext(Tarball, Project):
     def __init__(self):
         Project.__init__(self,
             'gettext-runtime',
+			'gettext-vc100-0.18-src',
             archive_url = 'http://dl.hexchat.net/gtk-win32/src/gettext-vc100-0.18-src.tar.bz2',
             dependencies = ['win-iconv'],
             patches = ['gettext-runtime.patch', 'gettext-lib-prexif.patch'],
@@ -563,6 +585,7 @@ class Project_glib(Tarball, Project):
     def __init__(self):
         Project.__init__(self,
             'glib',
+			'glib-2.46.2',
             archive_url = 'http://ftp.acc.umu.se/pub/GNOME/sources/glib/2.46/glib-2.46.2.tar.xz',
             dependencies = ['gettext-runtime', 'libffi', 'zlib'],
             patches = ['glib-if_nametoindex.patch',
@@ -581,6 +604,7 @@ class Project_glib_networking(Tarball, Project):
     def __init__(self):
         Project.__init__(self,
             'glib-networking',
+			'glib-networking-2.46.3',
             archive_url = 'https://github.com/wingtk/glib-networking/releases/download/2.46.3-openssl/glib-networking-2.46.3.tar.xz',
             dependencies = ['gsettings-desktop-schemas', 'openssl'],
             )
@@ -594,6 +618,7 @@ class Project_gsettings_desktop_schemas(Tarball, Project):
     def __init__(self):
         Project.__init__(self,
             'gsettings-desktop-schemas',
+			'gsettings-desktop-schemas-3.18.1',
             archive_url = 'http://ftp.acc.umu.se/pub/GNOME/sources/gsettings-desktop-schemas/3.18/gsettings-desktop-schemas-3.18.1.tar.xz',
             dependencies = ['glib'],
             )
@@ -608,8 +633,8 @@ class Project_gsettings_desktop_schemas(Tarball, Project):
 Project.add(Project_gsettings_desktop_schemas())
 
 class Project_gtk_base(Tarball, Project):
-    def __init__(self, name, **kwargs):
-        Project.__init__(self, name, **kwargs)
+    def __init__(self, name, tar_name, **kwargs):
+        Project.__init__(self, name, tar_name, **kwargs)
 
     def build(self):
         self.exec_msbuild(r'build\win32\vs%(vs_ver)s\gtk+.sln')
@@ -630,6 +655,7 @@ class Project_gtk(Project_gtk_base):
     def __init__(self):
         Project_gtk_base.__init__(self,
             'gtk', 
+			'gtk+-2.24.29',
             archive_url = 'http://dl.hexchat.net/gtk-win32/src/gtk+-2.24.29.tar.xz',
             dependencies = ['atk', 'gdk-pixbuf', 'pango'],
             patches = ['gtk-revert-scrolldc-commit.patch', 'gtk-bgimg.patch', 'gtk-accel.patch', 'gtk-multimonitor.patch', 'gdk-window.patch'],
@@ -641,6 +667,7 @@ class Project_gtk3(Project_gtk_base):
     def __init__(self):
         Project_gtk_base.__init__(self,
             'gtk3',
+			'gtk+-3.18.6',
             archive_url = 'http://ftp.acc.umu.se/pub/GNOME/sources/gtk+/3.18/gtk+-3.18.6.tar.xz',
             dependencies = ['atk', 'gdk-pixbuf', 'pango', 'libepoxy'],
             )
@@ -651,6 +678,7 @@ class Project_harfbuzz(Tarball, Project):
     def __init__(self):
         Project.__init__(self,
             'harfbuzz',
+			'harfbuzz-1.1.2',
             archive_url = 'https://github.com/wingtk/harfbuzz/releases/download/1.1.2.msvc/harfbuzz-1.1.2.tar.bz2',
             dependencies = ['freetype', 'glib'],
             )
@@ -669,6 +697,7 @@ class Project_hicolor_icon_theme(Tarball, Project):
     def __init__(self):
         Project.__init__(self,
             'hicolor-icon-theme',
+			'hicolor-icon-theme-0.15',
             archive_url = 'http://icon-theme.freedesktop.org/releases/hicolor-icon-theme-0.15.tar.xz',
             )
 
@@ -681,6 +710,7 @@ class Project_libcroco(Tarball, Project):
     def __init__(self):
         Project.__init__(self,
             'libcroco',
+			'libcroco-0.6.11',
             archive_url = 'http://ftp.acc.umu.se/pub/GNOME/sources/libcroco/0.6/libcroco-0.6.11.tar.xz',
             dependencies = ['glib', 'libxml2'],
             )
@@ -695,6 +725,7 @@ class Project_libepoxy(Tarball, Project):
     def __init__(self):
         Project.__init__(self,
             'libepoxy',
+			'libepoxy-1.3.1',
             archive_url = 'https://github.com/anholt/libepoxy/releases/download/v1.3.1/libepoxy-1.3.1.tar.bz2',
             patches = ['0001-MSVC-Builds-Support-PACKED.patch'],
             )
@@ -708,6 +739,7 @@ class Project_libffi(Tarball, Project):
     def __init__(self):
         Project.__init__(self,
             'libffi',
+			'libffi-3.2.1',
             archive_url = 'http://dl.hexchat.net/gtk-win32/src/libffi-3.2.1.tar.gz',
             patches = ['libffi-msvc-complex.patch', 'libffi-win64-jmp.patch', '0001-Fix-build-on-windows.patch'],
             )
@@ -729,6 +761,7 @@ class Project_libpng(Tarball, Project):
     def __init__(self):
         Project.__init__(self,
             'libpng',
+			'libpng-1.6.21',
             archive_url = 'http://dl.hexchat.net/gtk-win32/src/libpng-1.6.21.tar.xz',
             dependencies = ['zlib'],
             )
@@ -755,6 +788,7 @@ class Project_librsvg(Tarball, Project):
     def __init__(self):
         Project.__init__(self,
             'librsvg',
+			'librsvg-2.40.12',
             archive_url = 'http://ftp.acc.umu.se/pub/GNOME/sources/librsvg/2.40/librsvg-2.40.12.tar.xz',
             dependencies = ['libcroco', 'cairo', 'pango', 'gdk-pixbuf', 'gtk3'],
             )
@@ -769,6 +803,7 @@ class Project_libsoup(Tarball, Project):
     def __init__(self):
         Project.__init__(self,
             'libsoup',
+			'libsoup-2.52.1',
             archive_url = 'http://ftp.acc.umu.se/pub/GNOME/sources/libsoup/2.52/libsoup-2.52.1.tar.xz',
             dependencies = ['libxml2', 'glib-networking'],
             patches = ['0001-Provide-a-_SOUP_EXTERN-so-we-ensure-the-methods-get-.patch',
@@ -786,6 +821,7 @@ class Project_libxml2(Tarball, Project):
     def __init__(self):
         Project.__init__(self,
             'libxml2',
+			'libxml2-2.9.3',
             archive_url = 'http://dl.hexchat.net/gtk-win32/src/libxml2-2.9.3.tar.gz',
             dependencies = ['win-iconv'],
             )
@@ -804,6 +840,7 @@ class Project_lmdb(Tarball, Project):
     def __init__(self):
         Project.__init__(self,
             'lmdb',
+			'LMDB_MSVC_0.9.15',
             archive_url = 'https://github.com/wingtk/lmdb/archive/LMDB_MSVC_0.9.15.tar.gz',
             )
 
@@ -820,6 +857,7 @@ class Project_openssl(Tarball, Project):
     def __init__(self):
         Project.__init__(self,
             'openssl',
+			'openssl-1.0.2f',
             archive_url = 'ftp://ftp.openssl.org/source/openssl-1.0.2f.tar.gz',
             )
 
@@ -859,6 +897,7 @@ class Project_pango(Tarball, Project):
     def __init__(self):
         Project.__init__(self,
             'pango',
+			'pango-1.38.1',
             archive_url = 'http://ftp.acc.umu.se/pub/GNOME/sources/pango/1.38/pango-1.38.1.tar.xz',
             dependencies = ['cairo', 'harfbuzz'],
             )
@@ -873,6 +912,7 @@ class Project_pixman(Tarball, Project):
     def __init__(self):
         Project.__init__(self,
             'pixman',
+			'pixman-0.32.6',
             archive_url = 'http://dl.hexchat.net/gtk-win32/src/pixman-0.32.6.tar.gz',
             dependencies = ['libpng'],
             )
@@ -937,6 +977,7 @@ class Project_win_iconv(Tarball, Project):
     def __init__(self):
         Project.__init__(self,
             'win-iconv',
+			'win-iconv-0.0.7',
             archive_url = 'http://dl.hexchat.net/gtk-win32/src/win-iconv-0.0.7.tar.gz',
             patches = ['missing-endif.patch'],
             )
@@ -958,6 +999,7 @@ class Project_zlib(Tarball, Project):
     def __init__(self):
         Project.__init__(self,
             'zlib',
+			'zlib-1.2.8',
             archive_url = 'http://dl.hexchat.net/gtk-win32/src/zlib-1.2.8.tar.xz',
             )
 
@@ -978,8 +1020,8 @@ Project.add(Project_zlib())
 
 
 class CmakeProject(Tarball, Project):
-    def __init__(self, name, **kwargs):
-        Project.__init__(self, name, **kwargs)
+    def __init__(self, name, tar_name, **kwargs):
+        Project.__init__(self, name, tar_name, **kwargs)
 
     def build(self):
         cmake_config = 'Debug' if self.builder.opts.configuration == 'debug' else 'RelWithDebInfo'
@@ -988,17 +1030,17 @@ class CmakeProject(Tarball, Project):
         self.exec_vs('nmake /nologo install', add_path=self.builder.opts.cmake_path)
 
 class MercurialCmakeProject(MercurialRepo, CmakeProject):
-    def __init__(self, name, **kwargs):
-        CmakeProject.__init__(self, name, **kwargs)
+    def __init__(self, name, tar_name, **kwargs):
+        CmakeProject.__init__(self, name, tar_name, **kwargs)
 
-Project.add(MercurialCmakeProject('pycairo', repo_url='git+ssh://git@github.com:muntyan/pycairo-gtk-win32.git', dependencies = ['cairo']))
-Project.add(MercurialCmakeProject('pygobject', repo_url='git+ssh://git@github.com:muntyan/pygobject-gtk-win32.git', dependencies = ['glib']))
-Project.add(MercurialCmakeProject('pygtk', repo_url='git+ssh://git@github.com:muntyan/pygtk-gtk-win32.git', dependencies = ['gtk', 'pycairo', 'pygobject']))
+Project.add(MercurialCmakeProject('pycairo','pycairo', repo_url='git+ssh://git@github.com:muntyan/pycairo-gtk-win32.git', dependencies = ['cairo']))
+Project.add(MercurialCmakeProject('pygobject','pygobject', repo_url='git+ssh://git@github.com:muntyan/pygobject-gtk-win32.git', dependencies = ['glib']))
+Project.add(MercurialCmakeProject('pygtk','pygtk', repo_url='git+ssh://git@github.com:muntyan/pygtk-gtk-win32.git', dependencies = ['gtk', 'pycairo', 'pygobject']))
 
 
 #========================================================================================================================================================
 
-global_verbose = False
+global_verbose = True
 global_debug = False
 
 def print_message(msg):
@@ -1304,7 +1346,7 @@ def get_options(args):
     if not opts.patches_root_dir:
         opts.patches_root_dir = os.path.join(args.build_dir, 'github', 'gtk-win32')
     if not opts.vs_install_path:
-        opts.vs_install_path = r'C:\Program Files (x86)\Microsoft Visual Studio %s.0' % (opts.vs_ver,)
+        opts.vs_install_path = r'c:\Program Files (x86)\Microsoft Visual Studio %s.0' % (opts.vs_ver,)
 
     opts.projects = args.project
 
@@ -1391,9 +1433,9 @@ Examples:
                          help='Platform to build for, x86 or x64. Default is x86.')
     #p_build.add_argument('-c', '--configuration', default='release', choices=['release', 'debug'],
     #                     help='Configuration to build, release or debug. Default is release.')
-    p_build.add_argument('--build-dir', default=r'C:\gtk-build',
+    p_build.add_argument('--build-dir', default=r'c:\gtk-build',
                          help='The directory where the sources will be downloaded and built.')
-    p_build.add_argument('--msys-dir', default=r'C:\Msys64',
+    p_build.add_argument('--msys-dir', default=r'c:\Msys64',
                          help='The directory where you installed msys2.')
     p_build.add_argument('--archives-download-dir',
                          help="The directory to download the source archives to. It will be created. " +
@@ -1404,12 +1446,12 @@ Examples:
     p_build.add_argument('--vs-ver', default='12',
                          help="Visual Studio version 10,12, etc. Default is 12.")
     p_build.add_argument('--vs-install-path',
-                         help=r"The directory where you installed Visual Studio. Default is 'C:\Program Files (x86)\Microsoft Visual Studio $(build-ver).0'")
-    p_build.add_argument('--cmake-path', default=r'C:\CMake\bin',
+                         help=r"The directory where you installed Visual Studio. Default is 'c:\Program Files (x86)\Microsoft Visual Studio $(build-ver).0'")
+    p_build.add_argument('--cmake-path', default=r'c:\CMake\bin',
                          help="The directory where you installed cmake.")
-    p_build.add_argument('--perl-dir', default=r'C:\Perl',
+    p_build.add_argument('--perl-dir', default=r'c:\Perl',
                          help="The directory where you installed perl.")
-    p_build.add_argument('--python-dir', default=r'C:\Python27',
+    p_build.add_argument('--python-dir', default=r'c:\Python27',
                          help="The directory where you installed python.")
 
     p_build.add_argument('--clean', default=False, action='store_true',
