@@ -874,8 +874,8 @@ class Project_openssl(Tarball, Project):
     def __init__(self):
         Project.__init__(self,
             'openssl',
-			'openssl-1.0.2f',
-            archive_url = 'ftp://ftp.openssl.org/source/openssl-1.0.2f.tar.gz',
+			'openssl-1.0.2h',
+            archive_url = 'ftp://ftp.openssl.org/source/openssl-1.0.2h.tar.gz',
             )
 
     def build(self):
