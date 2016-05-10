@@ -211,6 +211,20 @@ class GitMsBuild(GitRepo, GitMsBuildProject):
     def __init__(self, name, tar_name, **kwargs):
         GitMsBuildProject.__init__(self, name, tar_name, **kwargs)
 
+class Project_libssh(Tarball, Project):
+    def __init__(self):
+        Project.__init__(self,
+            'libssh',
+            'libssh-0.7.2',
+            archive_url = 'https://red.libssh.org/attachments/download/177/libssh-0.7.2.tar.xz',
+            dependencies = ['zlib','openssl'],
+            )
+
+    def build(self):
+        self.exec_msbuild(r'build\vs%(vs_ver)s\libssh-library.sln')
+
+Project.add(Project_libssh())
+
 class Project_libssh2(Tarball, Project):
     def __init__(self):
         Project.__init__(self,
