@@ -1,4 +1,4 @@
-set PATH=C:\Python27;C:\Cmake\bin;C:\Perl\bin;%PATH%;
+set PATH=C:\Python27;C:\Cmake\bin;C:\Perl\bin;C:\nasm;%PATH%;
 
 call "C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\vcvarsall.bat" amd64
 
@@ -13,7 +13,7 @@ SET VCTargetsPath=C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\V120
 
 cd C:\gtk-build\github\gtk-win32
 
-python build.py build gtk3 clutter protobuf-c json-c libmicrohttpd leveldb libzip libcurl libuv -p x86
+python build.py build gtk3 clutter protobuf-c json-c libmicrohttpd leveldb libzip libcurl libuv libssh2 libssh -p x86
 
-python build.py build gtk3 clutter protobuf-c json-c libmicrohttpd leveldb libzip libcurl libuv -p x64
+python build.py build gtk3 clutter protobuf-c json-c libmicrohttpd leveldb libzip libcurl libuv libssh2 libssh -p x64
 
