@@ -88,6 +88,10 @@ class Project(object):
             configuration = '%(configuration)s'
         self.exec_vs('msbuild ' + cmd + ' /p:Configuration=' + configuration + ' %(msbuild_opts)s')
 
+    def exec_msbuild_debug(self, cmd, configuration=None):
+        if not configuration:
+            configuration = '%(configuration)s'
+        self.exec_vs('msbuild ' + cmd + ' /p:Configuration=Debug' + ' %(msbuild_opts)s')
     def install(self, *args):
         self.builder.install(self._get_working_dir(), self.pkg_dir, *args)
 
@@ -355,8 +359,8 @@ class Project_clutter(Tarball, Project):
     def __init__(self):
         Project.__init__(self,
             'clutter',
-			'clutter-1.24.2',
-			archive_url = 'http://ftp.acc.umu.se/pub/GNOME/sources/clutter/1.24/clutter-1.24.2.tar.xz',
+            'clutter-1.24.2',
+            archive_url = 'http://ftp.acc.umu.se/pub/GNOME/sources/clutter/1.24/clutter-1.24.2.tar.xz',
 			dependencies = ['atk','cogl','json-glib'],
             )
 
@@ -364,6 +368,20 @@ class Project_clutter(Tarball, Project):
         self.exec_msbuild(r'build\win32\vs%(vs_ver)s\clutter.sln')
 
 Project.add(Project_clutter())
+
+class Project_clutter_debug(Tarball, Project):
+    def __init__(self):
+        Project.__init__(self,
+            'clutter_debug',
+            'clutter-1.24.2',
+            archive_url = 'http://ftp.acc.umu.se/pub/GNOME/sources/clutter/1.24/clutter-1.24.2.tar.xz',
+			dependencies = ['atk','cogl','json-glib'],
+            )
+
+    def build(self):
+        self.exec_msbuild_debug(r'build\win32\vs%(vs_ver)s\clutter.sln')
+
+Project.add(Project_clutter_debug())
 
 class Project_cogl(Tarball, Project):
     def __init__(self):
