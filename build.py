@@ -727,13 +727,13 @@ class Project_harfbuzz(Tarball, Project):
     def __init__(self):
         Project.__init__(self,
             'harfbuzz',
-			'harfbuzz-1.1.2',
-            archive_url = 'https://github.com/wingtk/harfbuzz/releases/download/1.1.2.msvc/harfbuzz-1.1.2.tar.bz2',
+			'harfbuzz-1.3.0',
+            archive_url = 'https://www.freedesktop.org/software/harfbuzz/release/harfbuzz-1.3.0.tar.bz2',
             dependencies = ['freetype', 'glib'],
             )
 
     def build(self):
-        self.push_location(r'.\build\win32')
+        self.push_location(r'.\win32')
         self.builder.make_dir(os.path.join(self.build_dir, 'build', 'win32', self.builder.opts.configuration, 'win32'))
         #Exec nmake /f Makefile.vc clean CFG=%(configuration)s
         self.exec_vs(r'nmake /nologo /f Makefile.vc CFG=%(configuration)s PYTHON="%(python_dir)s\python.exe" PERL="%(perl_dir)s\bin\perl.exe" PREFIX="%(gtk_dir)s" FREETYPE=1 GOBJECT=1')
@@ -837,8 +837,8 @@ class Project_librsvg(Tarball, Project):
     def __init__(self):
         Project.__init__(self,
             'librsvg',
-			'librsvg-2.40.12',
-            archive_url = 'http://ftp.acc.umu.se/pub/GNOME/sources/librsvg/2.40/librsvg-2.40.12.tar.xz',
+			'librsvg-2.40.16',
+            archive_url = 'http://ftp.acc.umu.se/pub/GNOME/sources/librsvg/2.40/librsvg-2.40.16.tar.xz',
             dependencies = ['libcroco', 'cairo', 'pango', 'gdk-pixbuf', 'gtk3'],
             )
 
@@ -946,8 +946,8 @@ class Project_pango(Tarball, Project):
     def __init__(self):
         Project.__init__(self,
             'pango',
-			'pango-1.38.1',
-            archive_url = 'http://ftp.acc.umu.se/pub/GNOME/sources/pango/1.38/pango-1.38.1.tar.xz',
+			'pango-1.40.1',
+            archive_url = 'http://ftp.acc.umu.se/pub/GNOME/sources/pango/1.40/pango-1.40.1.tar.xz',
             dependencies = ['cairo', 'harfbuzz'],
             )
 
